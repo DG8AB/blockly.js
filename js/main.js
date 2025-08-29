@@ -7,13 +7,31 @@ const workspace = Blockly.inject(blocklyDiv, {
   trashcan: true,
 });
 
+function generateFullHtml(bodyContent) {
+  const title = "My Awesome Webpage"; // A default title
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${title}</title>
+    </head>
+    <body>
+      ${bodyContent}
+    </body>
+    </html>
+  `;
+}
+
 // Live preview update
 function updatePreview() {
-  const code = Blockly.HTML.workspaceToCode(workspace);
+  const bodyContent = Blockly.HTML.workspaceToCode(workspace);
+  const fullHtml = generateFullHtml(bodyContent);
   const previewFrame = document.getElementById('preview-frame');
   const preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
   preview.open();
-  preview.write(code);
+  preview.write(fullHtml);
   preview.close();
 }
 
@@ -23,7 +41,8 @@ workspace.addChangeListener(updatePreview);
 // Download button event listener
 const downloadBtn = document.getElementById('download-btn');
 downloadBtn.addEventListener('click', () => {
-  const code = Blockly.HTML.workspaceToCode(workspace);
-  const blob = new Blob([code], {type: 'text/html;charset=utf-8'});
+  const bodyContent = Blockly.HTML.workspaceToCode(workspace);
+  const fullHtml = generateFullHtml(bodyContent);
+  const blob = new Blob([fullHtml], {type: 'text/html;charset=utf-8'});
   saveAs(blob, 'webpage.html');
 });

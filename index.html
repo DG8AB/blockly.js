@@ -8,18 +8,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
-  <h1>Blockly Web Page Builder</h1>
+  <header class="app-header">
+    <h1>Web Page Builder</h1>
+    <button id="download-btn">Download as .html</button>
+  </header>
+
   <div id="blockly-container">
     <div id="blockly-div"></div>
     <xml id="toolbox" style="display: none">
       <category name="Structure" colour="230">
-        <block type="html"></block>
         <block type="div"></block>
       </category>
       <category name="Content" colour="20">
         <block type="p"></block>
-        <block type="title"></block>
-        <block type="h"></block>
+        <block type="h1"></block>
+        <block type="h2"></block>
+        <block type="h3"></block>
         <block type="img"></block>
         <block type="video"></block>
       </category>
@@ -42,11 +46,11 @@
       </category>
     </xml>
   </div>
+
   <div id="preview-container">
     <h2>Live Preview</h2>
     <iframe id="preview-frame"></iframe>
   </div>
-  <button id="download-btn">Download as .html</button>
 
   <script src="js/custom_blocks.js"></script>
   <script src="js/html_generator.js"></script>

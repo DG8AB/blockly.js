@@ -1,63 +1,5 @@
 // Defines the custom blocks for the HTML elements.
 
-// HTML block
-Blockly.Blocks['html'] = {
-  init: function() {
-    this.appendStatementInput("HEAD")
-        .setCheck("head")
-        .appendField("<html>");
-    this.appendStatementInput("BODY")
-        .setCheck("body")
-        .appendField("<body>");
-    this.setColour(230);
-    this.setTooltip("The root element of an HTML page.");
-    this.setHelpUrl("");
-    this.setDeletable(false); // Can't delete the root block
-  }
-};
-
-// Head block
-Blockly.Blocks['head'] = {
-  init: function() {
-    this.appendStatementInput("CONTENT")
-        .setCheck("title") // Only allow title block inside head
-        .appendField("<head>");
-    this.setPreviousStatement(true, "head");
-    this.setNextStatement(false); // No next statement for head
-    this.setColour(160);
-    this.setTooltip("The <head> element is a container for metadata.");
-    this.setHelpUrl("");
-  }
-};
-
-// Title block
-Blockly.Blocks['title'] = {
-  init: function() {
-    this.appendValueInput("TEXT")
-        .setCheck("String")
-        .appendField("<title>");
-    this.setPreviousStatement(true, "title");
-    this.setNextStatement(false);
-    this.setColour(160);
-    this.setTooltip("The <title> tag defines the title of the document.");
-    this.setHelpUrl("");
-  }
-};
-
-// Body block
-Blockly.Blocks['body'] = {
-  init: function() {
-    this.appendStatementInput("CONTENT")
-        .setCheck(null) // Allow any content inside body
-        .appendField("<body>");
-    this.setPreviousStatement(true, "body");
-    this.setNextStatement(false);
-    this.setColour(20);
-    this.setTooltip("The <body> tag defines the document's body.");
-    this.setHelpUrl("");
-  }
-};
-
 // Paragraph block
 Blockly.Blocks['p'] = {
   init: function() {
@@ -81,7 +23,8 @@ Blockly.Blocks['p'] = {
 // Div block
 Blockly.Blocks['div'] = {
   init: function() {
-    this.appendStatementInput("CONTENT")
+    this.appendValueInput("CONTENT")
+        .setCheck("String")
         .appendField("<div>");
     this.appendValueInput("STYLE")
         .setCheck("style")
@@ -92,36 +35,47 @@ Blockly.Blocks['div'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
-    this.setTooltip("A generic container.");
+    this.setTooltip("A generic container for text.");
     this.setHelpUrl("https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div");
   }
 };
 
-// Heading block
-Blockly.Blocks['h'] = {
+// H1 block
+Blockly.Blocks['h1'] = {
   init: function() {
-    var dropdown = new Blockly.FieldDropdown([
-      ["h1", "h1"],
-      ["h2", "h2"],
-      ["h3", "h3"],
-      ["h4", "h4"],
-      ["h5", "h5"],
-      ["h6", "h6"]
-    ]);
     this.appendValueInput("TEXT")
         .setCheck("String")
-        .appendField(dropdown, "LEVEL");
-    this.appendValueInput("STYLE")
-        .setCheck("style")
-        .appendField("style");
-    this.appendValueInput("ONCLICK")
-        .setCheck("event")
-        .appendField("onclick");
+        .appendField("<h1>");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
-    this.setTooltip("A heading element.");
-    this.setHelpUrl("https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements");
+    this.setTooltip("A level 1 heading.");
+  }
+};
+
+// H2 block
+Blockly.Blocks['h2'] = {
+  init: function() {
+    this.appendValueInput("TEXT")
+        .setCheck("String")
+        .appendField("<h2>");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip("A level 2 heading.");
+  }
+};
+
+// H3 block
+Blockly.Blocks['h3'] = {
+  init: function() {
+    this.appendValueInput("TEXT")
+        .setCheck("String")
+        .appendField("<h3>");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip("A level 3 heading.");
   }
 };
 
@@ -233,26 +187,6 @@ Blockly.HTML['style'] = function(block) {
   return [style, Blockly.HTML.ORDER_ATOMIC];
 };
 
-Blockly.HTML['html'] = function(block) {
-  var head = Blockly.HTML.statementToCode(block, 'HEAD');
-  var body = Blockly.HTML.statementToCode(block, 'BODY');
-  return '<!DOCTYPE html>\n<html>\n' + head + '\n' + body + '\n</html>';
-};
-
-Blockly.HTML['head'] = function(block) {
-  var content = Blockly.HTML.statementToCode(block, 'CONTENT');
-  return '<head>\n  <meta charset="utf-8">\n' + content + '</head>';
-};
-
-Blockly.HTML['title'] = function(block) {
-  var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
-  return '  <title>' + text.replace(/'/g, '') + '</title>\n';
-};
-
-Blockly.HTML['body'] = function(block) {
-  var content = Blockly.HTML.statementToCode(block, 'CONTENT');
-  return '<body>\n' + content + '</body>';
-};
 
 Blockly.HTML['p'] = function(block) {
   var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
@@ -263,20 +197,26 @@ Blockly.HTML['p'] = function(block) {
 };
 
 Blockly.HTML['div'] = function(block) {
-  var content = Blockly.HTML.statementToCode(block, 'CONTENT');
+  var content = Blockly.HTML.valueToCode(block, 'CONTENT', Blockly.HTML.ORDER_ATOMIC) || '';
   var style = Blockly.HTML.valueToCode(block, 'STYLE', Blockly.HTML.ORDER_ATOMIC) || '';
   var onclick = Blockly.HTML.valueToCode(block, 'ONCLICK', Blockly.HTML.ORDER_ATOMIC) || '';
   var onclickAttr = onclick ? 'onclick="' + onclick + '"' : '';
-  return '<div style="' + style + '" ' + onclickAttr + '>\n' + content + '</div>\n';
+  return '<div style="' + style + '" ' + onclickAttr + '>' + content.replace(/'/g, '') + '</div>\n';
 };
 
-Blockly.HTML['h'] = function(block) {
-  var level = block.getFieldValue('LEVEL');
+Blockly.HTML['h1'] = function(block) {
   var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
-  var style = Blockly.HTML.valueToCode(block, 'STYLE', Blockly.HTML.ORDER_ATOMIC) || '';
-  var onclick = Blockly.HTML.valueToCode(block, 'ONCLICK', Blockly.HTML.ORDER_ATOMIC) || '';
-  var onclickAttr = onclick ? 'onclick="' + onclick + '"' : '';
-  return '<' + level + ' style="' + style + '" ' + onclickAttr + '>' + text.replace(/'/g, '') + '</' + level + '>\n';
+  return '<h1>' + text.replace(/'/g, '') + '</h1>\n';
+};
+
+Blockly.HTML['h2'] = function(block) {
+  var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
+  return '<h2>' + text.replace(/'/g, '') + '</h2>\n';
+};
+
+Blockly.HTML['h3'] = function(block) {
+  var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
+  return '<h3>' + text.replace(/'/g, '') + '</h3>\n';
 };
 
 Blockly.HTML['img'] = function(block) {
