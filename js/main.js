@@ -7,7 +7,7 @@ const workspace = Blockly.inject(blocklyDiv, {
   trashcan: true,
 });
 
-function generateFullHtml(bodyContent) {
+function generateFullHtml(bodyContent, scriptContent, cssContent) {
   const title = "My Awesome Webpage"; // A default title
   return `
     <!DOCTYPE html>
@@ -16,9 +16,15 @@ function generateFullHtml(bodyContent) {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${title}</title>
+      <style>
+        ${cssContent}
+      </style>
     </head>
     <body>
       ${bodyContent}
+      <script>
+        ${scriptContent}
+      </script>
     </body>
     </html>
   `;
@@ -27,7 +33,9 @@ function generateFullHtml(bodyContent) {
 // Live preview update
 function updatePreview() {
   const bodyContent = Blockly.HTML.workspaceToCode(workspace);
-  const fullHtml = generateFullHtml(bodyContent);
+  const scriptContent = Blockly.JavaScript.workspaceToCode(workspace);
+  const cssContent = Blockly.CSS.workspaceToCode(workspace);
+  const fullHtml = generateFullHtml(bodyContent, scriptContent, cssContent);
   const previewFrame = document.getElementById('preview-frame');
   const preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
   preview.open();
@@ -42,7 +50,15 @@ workspace.addChangeListener(updatePreview);
 const downloadBtn = document.getElementById('download-btn');
 downloadBtn.addEventListener('click', () => {
   const bodyContent = Blockly.HTML.workspaceToCode(workspace);
-  const fullHtml = generateFullHtml(bodyContent);
+  const scriptContent = Blockly.JavaScript.workspaceToCode(workspace);
+  const cssContent = Blockly.CSS.workspaceToCode(workspace);
+  const fullHtml = generateFullHtml(bodyContent, scriptContent, cssContent);
   const blob = new Blob([fullHtml], {type: 'text/html;charset=utf-8'});
   saveAs(blob, 'webpage.html');
+});
+
+// Tutorial button event listener
+const tutorialBtn = document.getElementById('tutorial-btn');
+tutorialBtn.addEventListener('click', () => {
+  startTutorial();
 });

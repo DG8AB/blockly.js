@@ -6,12 +6,9 @@ Blockly.Blocks['p'] = {
     this.appendValueInput("TEXT")
         .setCheck("String")
         .appendField("<p>");
-    this.appendValueInput("STYLE")
-        .setCheck("style")
-        .appendField("style");
-    this.appendValueInput("ONCLICK")
-        .setCheck("event")
-        .appendField("onclick");
+    this.appendDummyInput()
+        .appendField("id")
+        .appendField(new Blockly.FieldTextInput("p1"), "ID");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -26,12 +23,9 @@ Blockly.Blocks['div'] = {
     this.appendValueInput("CONTENT")
         .setCheck("String")
         .appendField("<div>");
-    this.appendValueInput("STYLE")
-        .setCheck("style")
-        .appendField("style");
-    this.appendValueInput("ONCLICK")
-        .setCheck("event")
-        .appendField("onclick");
+    this.appendDummyInput()
+        .appendField("id")
+        .appendField(new Blockly.FieldTextInput("div1"), "ID");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
@@ -46,6 +40,9 @@ Blockly.Blocks['h1'] = {
     this.appendValueInput("TEXT")
         .setCheck("String")
         .appendField("<h1>");
+    this.appendDummyInput()
+        .appendField("id")
+        .appendField(new Blockly.FieldTextInput("h1_1"), "ID");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -59,6 +56,9 @@ Blockly.Blocks['h2'] = {
     this.appendValueInput("TEXT")
         .setCheck("String")
         .appendField("<h2>");
+    this.appendDummyInput()
+        .appendField("id")
+        .appendField(new Blockly.FieldTextInput("h2_1"), "ID");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -72,6 +72,9 @@ Blockly.Blocks['h3'] = {
     this.appendValueInput("TEXT")
         .setCheck("String")
         .appendField("<h3>");
+    this.appendDummyInput()
+        .appendField("id")
+        .appendField(new Blockly.FieldTextInput("h3_1"), "ID");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -113,110 +116,125 @@ Blockly.Blocks['video'] = {
   }
 };
 
-// Style block
-Blockly.Blocks['style'] = {
-  init: function() {
-    this.appendValueInput("COLOR")
-        .setCheck("String")
-        .appendField("color");
-    this.appendValueInput("BACKGROUND_COLOR")
-        .setCheck("String")
-        .appendField("background-color");
-    this.appendValueInput("FONT_SIZE")
-        .setCheck("String")
-        .appendField("font-size");
-    this.setOutput(true, "style");
-    this.setColour(120);
-    this.setTooltip("Defines CSS styles.");
-    this.setHelpUrl("");
-  }
-};
 
-// Script block
-Blockly.Blocks['script'] = {
+// Event Listener block
+Blockly.Blocks['add_event_listener'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("<script>");
-    this.appendStatementInput("SCRIPT")
-        .setCheck(null);
+        .appendField("when element with id")
+        .appendField(new Blockly.FieldTextInput("p1"), "ID");
+    this.appendDummyInput()
+        .appendField("is")
+        .appendField(new Blockly.FieldDropdown([
+          ["clicked", "click"],
+          ["mouse over", "mouseover"],
+          ["mouse out", "mouseout"]
+        ]), "EVENT");
+    this.appendStatementInput("ACTION")
+        .setCheck(null)
+        .appendField("do");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(65);
-    this.setTooltip("Embeds JavaScript code.");
-    this.setHelpUrl("https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script");
-  }
-};
-
-// Onclick block
-Blockly.Blocks['onclick'] = {
-  init: function() {
-    this.appendValueInput("CODE")
-        .setCheck("String")
-        .appendField("onclick");
-    this.setOutput(true, "event");
-    this.setColour(65);
-    this.setTooltip("Executes JavaScript code on click.");
+    this.setTooltip("Attaches an event listener to an element.");
     this.setHelpUrl("");
   }
 };
 
+// CSS Rule block
+Blockly.Blocks['css_rule'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("style for selector")
+        .appendField(new Blockly.FieldTextInput("h1"), "SELECTOR");
+    this.appendStatementInput("PROPERTIES")
+        .setCheck(["css_property"]);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(120);
+    this.setTooltip("Defines a CSS rule for a given selector.");
+  }
+};
+
+// CSS Color block
+Blockly.Blocks['css_color'] = {
+  init: function() {
+    this.appendValueInput("VALUE")
+        .setCheck("String")
+        .appendField("color");
+    this.setPreviousStatement(true, "css_property");
+    this.setNextStatement(true, "css_property");
+    this.setColour(120);
+  }
+};
+
+// CSS Background Color block
+Blockly.Blocks['css_background_color'] = {
+  init: function() {
+    this.appendValueInput("VALUE")
+        .setCheck("String")
+        .appendField("background-color");
+    this.setPreviousStatement(true, "css_property");
+    this.setNextStatement(true, "css_property");
+    this.setColour(120);
+  }
+};
+
+// CSS Font Size block
+Blockly.Blocks['css_font_size'] = {
+  init: function() {
+    this.appendValueInput("VALUE")
+        .setCheck("String")
+        .appendField("font-size");
+    this.setPreviousStatement(true, "css_property");
+    this.setNextStatement(true, "css_property");
+    this.setColour(120);
+  }
+};
+
+// CSS Margin block
+Blockly.Blocks['css_margin'] = {
+  init: function() {
+    this.appendValueInput("VALUE")
+        .setCheck("String")
+        .appendField("margin");
+    this.setPreviousStatement(true, "css_property");
+    this.setNextStatement(true, "css_property");
+    this.setColour(120);
+  }
+};
+
+
 // --- HTML Generators ---
-
-Blockly.HTML['onclick'] = function(block) {
-  var code = Blockly.HTML.valueToCode(block, 'CODE', Blockly.HTML.ORDER_ATOMIC) || '';
-  code = code.trim().replace(/'/g, '');
-  return [code, Blockly.HTML.ORDER_ATOMIC];
-};
-
-Blockly.HTML['style'] = function(block) {
-  var color = Blockly.HTML.valueToCode(block, 'COLOR', Blockly.HTML.ORDER_ATOMIC) || '';
-  var bgColor = Blockly.HTML.valueToCode(block, 'BACKGROUND_COLOR', Blockly.HTML.ORDER_ATOMIC) || '';
-  var fontSize = Blockly.HTML.valueToCode(block, 'FONT_SIZE', Blockly.HTML.ORDER_ATOMIC) || '';
-
-  var style = '';
-  if (color) {
-    style += 'color:' + color.replace(/'/g, '') + ';';
-  }
-  if (bgColor) {
-    style += 'background-color:' + bgColor.replace(/'/g, '') + ';';
-  }
-  if (fontSize) {
-    style += 'font-size:' + fontSize.replace(/'/g, '') + ';';
-  }
-
-  return [style, Blockly.HTML.ORDER_ATOMIC];
-};
-
 
 Blockly.HTML['p'] = function(block) {
   var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
-  var style = Blockly.HTML.valueToCode(block, 'STYLE', Blockly.HTML.ORDER_ATOMIC) || '';
-  var onclick = Blockly.HTML.valueToCode(block, 'ONCLICK', Blockly.HTML.ORDER_ATOMIC) || '';
-  var onclickAttr = onclick ? 'onclick="' + onclick + '"' : '';
-  return '  <p style="' + style + '" ' + onclickAttr + '>' + text.replace(/'/g, '') + '</p>\n';
+  var id = block.getFieldValue('ID');
+  return '  <p id="' + id + '">' + text.replace(/'/g, '') + '</p>\n';
 };
 
 Blockly.HTML['div'] = function(block) {
   var content = Blockly.HTML.valueToCode(block, 'CONTENT', Blockly.HTML.ORDER_ATOMIC) || '';
-  var style = Blockly.HTML.valueToCode(block, 'STYLE', Blockly.HTML.ORDER_ATOMIC) || '';
-  var onclick = Blockly.HTML.valueToCode(block, 'ONCLICK', Blockly.HTML.ORDER_ATOMIC) || '';
-  var onclickAttr = onclick ? 'onclick="' + onclick + '"' : '';
-  return '<div style="' + style + '" ' + onclickAttr + '>' + content.replace(/'/g, '') + '</div>\n';
+  var id = block.getFieldValue('ID');
+  return '<div id="' + id + '">' + content.replace(/'/g, '') + '</div>\n';
 };
 
 Blockly.HTML['h1'] = function(block) {
   var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
-  return '<h1>' + text.replace(/'/g, '') + '</h1>\n';
+  var id = block.getFieldValue('ID');
+  return '<h1 id="' + id + '">' + text.replace(/'/g, '') + '</h1>\n';
 };
 
 Blockly.HTML['h2'] = function(block) {
   var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
-  return '<h2>' + text.replace(/'/g, '') + '</h2>\n';
+  var id = block.getFieldValue('ID');
+  return '<h2 id="' + id + '">' + text.replace(/'/g, '') + '</h2>\n';
 };
 
 Blockly.HTML['h3'] = function(block) {
   var text = Blockly.HTML.valueToCode(block, 'TEXT', Blockly.HTML.ORDER_ATOMIC) || '';
-  return '<h3>' + text.replace(/'/g, '') + '</h3>\n';
+  var id = block.getFieldValue('ID');
+  return '<h3 id="' + id + '">' + text.replace(/'/g, '') + '</h3>\n';
 };
 
 Blockly.HTML['img'] = function(block) {
@@ -231,7 +249,13 @@ Blockly.HTML['video'] = function(block) {
   return '<video src="' + src.replace(/'/g, '') + '" ' + controls + '></video>\n';
 };
 
-Blockly.HTML['script'] = function(block) {
-  var script = Blockly.JavaScript.statementToCode(block, 'SCRIPT');
-  return '<script>\n' + script + '</script>\n';
+Blockly.JavaScript['add_event_listener'] = function(block) {
+  var elementId = block.getFieldValue('ID');
+  var event = block.getFieldValue('EVENT');
+  var action = Blockly.JavaScript.statementToCode(block, 'ACTION');
+
+  var code = "document.getElementById('" + elementId + "').addEventListener('" + event + "', function() {\n" +
+             action +
+             "});\n";
+  return code;
 };

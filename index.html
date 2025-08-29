@@ -4,13 +4,18 @@
   <meta charset="utf-8">
   <title>Blockly Web Page Builder</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
   <script src="https://unpkg.com/blockly/blockly.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
 </head>
 <body>
   <header class="app-header">
     <h1>Web Page Builder</h1>
-    <button id="download-btn">Download as .html</button>
+    <div>
+      <button id="tutorial-btn">Start Tutorial</button>
+      <button id="download-btn">Download as .html</button>
+    </div>
   </header>
 
   <div id="blockly-container">
@@ -31,11 +36,14 @@
         <block type="text"></block>
       </category>
       <category name="Style" colour="120">
-        <block type="style"></block>
+        <block type="css_rule"></block>
+        <block type="css_color"></block>
+        <block type="css_background_color"></block>
+        <block type="css_font_size"></block>
+        <block type="css_margin"></block>
       </category>
       <category name="Logic" colour="65">
-        <block type="script"></block>
-        <block type="onclick"></block>
+        <block type="add_event_listener"></block>
         <block type="controls_if"></block>
         <block type="controls_repeat_ext"></block>
         <block type="logic_compare"></block>
@@ -54,6 +62,8 @@
 
   <script src="js/custom_blocks.js"></script>
   <script src="js/html_generator.js"></script>
+  <script src="js/css_generator.js"></script>
+  <script src="js/tutorial.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
